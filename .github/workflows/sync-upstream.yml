@@ -39,6 +39,7 @@ jobs:
           TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
+          if [ -z "$TOKEN" ] || [ -z "$CHAT" ]; then echo "Telegram secrets not set; skipping."; exit 0; fi
           curl -s -o /dev/null "https://api.telegram.org/bot${TOKEN}/sendMessage" \
             --data-urlencode chat_id="${CHAT}" \
             --data-urlencode text="🐱 CatLink: o fork jcalheir/pycatlink foi atualizado com novidades do autor original. Atualização disponível no Marketplace do HA dentro de ~48 h."
@@ -48,6 +49,7 @@ jobs:
           TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
+          if [ -z "$TOKEN" ] || [ -z "$CHAT" ]; then echo "Telegram secrets not set; skipping."; exit 0; fi
           curl -s -o /dev/null "https://api.telegram.org/bot${TOKEN}/sendMessage" \
             --data-urlencode chat_id="${CHAT}" \
             --data-urlencode text="⚠️ CatLink: não consegui juntar as novidades do autor original ao fork jcalheir/pycatlink (conflito ou erro). Pede ao Claude para resolver: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
