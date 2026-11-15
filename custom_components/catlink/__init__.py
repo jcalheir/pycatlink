@@ -9,6 +9,8 @@ from pycatlink.models import CatlinkAccountConfig
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
+from .services import async_setup_services
+
 from .const import (
     CONF_BACKEND_URL,
     CONF_PASSWORD,
@@ -27,6 +29,20 @@ PLATFORMS: list[Platform] = [
     Platform.SENSOR,
     Platform.SWITCH,
 ]
+
+
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.typing import ConfigType
+
+from .const import DOMAIN
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Set up integration-wide services."""
+    async_setup_services(hass)
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: CatlinkConfigEntry) -> bool:

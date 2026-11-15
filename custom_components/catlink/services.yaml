@@ -1,0 +1,12 @@
+api_request:
+  fields:
+    path:
+      required: true
+      example: "token/litterbox/stats/log/top5"
+      selector:
+        text:
+    params:
+      required: false
+      example: '{"deviceId": "123"}'
+      selector:
+        object:

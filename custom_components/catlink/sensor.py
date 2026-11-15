@@ -358,3 +358,12 @@ class CatlinkPetSensor(CoordinatorEntity[CatlinkDataUpdateCoordinator], SensorEn
         if not pet:
             return None
         return self.entity_description.value_fn(pet)
+
+    @property
+    def entity_picture(self) -> str | None:
+        """Return the pet photo from the CatLink app, if any."""
+        pet = self.coordinator.data.pets.get(self._pet_id)
+        avatar = getattr(pet, "avatar", None) if pet else None
+        if isinstance(avatar, str) and avatar.startswith(("http://", "https://")):
+            return avatar
+        return None
