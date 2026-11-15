@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 from aiohttp import ClientConnectorError, ClientSession, ContentTypeError
 
 from .const import (
+    API_LOGIN_EMAIL,
     API_LOGIN_PASSWORD,
     DATA_KEY_TOKEN,
     DEFAULT_REQUEST_TIMEOUT,
@@ -12,6 +13,7 @@ from .const import (
     HEADER_LANGUAGE,
     HEADER_TOKEN,
     HEADER_USER_AGENT,
+    PARAMETER_EMAIL,
     PARAMETER_INTERNATIONAL_CODE,
     PARAMETER_MOBILE,
     PARAMETER_NONCESTR,
@@ -45,17 +47,33 @@ class CatlinkApiClient:
             return CryptUtils.encrypt_password(self.config.password)
         return self.config.password
 
+    def _login_request(self) -> tuple[str, dict[str, Any]]:
+        """Return the login endpoint and parameters.
+
+        Accounts registered with an email address use the ``login/email``
+        endpoint; phone-based accounts keep using ``login/password``.
+        """
+        login = str(self.config.phone).strip()
+        if "@" in login:
+            return API_LOGIN_EMAIL, {
+                PARAMETER_PLATFORM: PLATFORM_ANDROID,
+                PARAMETER_EMAIL: login,
+                PARAMETER_PASSWORD: self.password,
+            }
+        return API_LOGIN_PASSWORD, {
+            PARAMETER_PLATFORM: PLATFORM_ANDROID,
+            PARAMETER_INTERNATIONAL_CODE: self.config.phone_international_code,
+            PARAMETER_MOBILE: login,
+            PARAMETER_PASSWORD: self.password,
+        }
+
     async def async_login(self) -> None:
         """Login the account and store the authentication token."""
+        path, parameters = self._login_request()
         response = await self.request(
-            path=API_LOGIN_PASSWORD,
+            path=path,
             method=HttpMethod.POST,
-            parameters={
-                PARAMETER_PLATFORM: PLATFORM_ANDROID,
-                PARAMETER_INTERNATIONAL_CODE: self.config.phone_international_code,
-                PARAMETER_MOBILE: str(self.config.phone),
-                PARAMETER_PASSWORD: self.password,
-            },
+            parameters=parameters,
         )
 
         token = response.get(RESPONSE_KEY_DATA, {}).get(DATA_KEY_TOKEN)

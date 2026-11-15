@@ -5,9 +5,12 @@
                 "title": "CatLink einrichten",
                 "description": "Bitte geben Sie Ihre CatLink-Kontodaten ein.",
                 "data": {
-                    "phone": "Telefonnummer",
+                    "phone": "Telefonnummer oder E-Mail",
                     "password": "Passwort",
                     "phone_international_code": "Internationale Vorwahl"
+                },
+                "data_description": {
+                    "phone_international_code": "Nur für Telefonkonten (z. B. 49); bei E-Mail-Konten beliebig"
                 }
             }
         },

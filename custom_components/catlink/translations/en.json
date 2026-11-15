@@ -5,15 +5,18 @@
                 "title": "Set up CatLink",
                 "description": "Enter your CatLink account credentials",
                 "data": {
-                    "phone": "Phone number",
+                    "phone": "Phone number or email",
                     "password": "Password",
                     "phone_international_code": "Phone international code"
+                },
+                "data_description": {
+                    "phone_international_code": "Only used for phone accounts (e.g. 351); any value works for email accounts"
                 }
             }
         },
         "error": {
             "cannot_connect": "Failed to connect to CatLink servers",
-            "invalid_auth": "Invalid phone number or password",
+            "invalid_auth": "Invalid phone number/email or password",
             "unknown": "Unexpected error occurred"
         },
         "abort": {
