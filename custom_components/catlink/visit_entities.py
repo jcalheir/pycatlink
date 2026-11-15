@@ -120,7 +120,7 @@ class CatlinkLastVisitSensor(
         if visit and (not self._restored or visit.when >= self._restored[0]):
             return {k: v for k, v in visit.attributes().items() if k != "hora"}
         if self._restored:
-            keep = ("tipo", "peso_kg", "duracao_s")
+            keep = ("tipo", "peso_kg", "duracao_s", "resumo")
             return {k: v for k, v in self._restored[1].items() if k in keep}
         return None
 

@@ -26,6 +26,7 @@ def test_parse_log_kinds_and_values():
     v = visits.parse_log(log(1, "02:40", "Nico pooped"), TZ, now)
     assert v.kind == "coco" and v.weight_kg == 5.3 and v.duration_s == 107
     assert v.when.isoformat() == "2026-11-15T02:40:00+00:00"
+    assert v.attributes()["resumo"] == "cocó · 1 min 47 s · 5,3 kg"
     assert visits.parse_log(log(2, "02:10", "Nina peed", pet="223540"), TZ, now).kind == "xixi"
     assert visits.parse_log(log(3, "02:45", "Sensor cleaning", typ="RUN"), TZ, now) is None
     unknown = visits.parse_log(log(4, "01:00", "Unrecognized cat", pet="0"), TZ, now)

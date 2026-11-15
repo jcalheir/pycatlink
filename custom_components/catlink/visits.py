@@ -30,6 +30,7 @@ KIND_PEE = "xixi"
 KIND_POOP = "coco"
 KIND_UNKNOWN = "desconhecido"
 KINDS = [KIND_PEE, KIND_POOP, KIND_UNKNOWN]
+KIND_LABELS = {KIND_PEE: "xixi", KIND_POOP: "cocó", KIND_UNKNOWN: "não identificado"}
 
 # metric -> (has_sum, unit, unit_class, label)
 HISTORY_METRICS: dict[str, tuple[bool, str | None, str | None, str]] = {
@@ -59,7 +60,18 @@ class Visit:
             "peso_kg": self.weight_kg,
             "duracao_s": self.duration_s,
             "hora": self.when.isoformat(),
+            "resumo": self.summary_text(),
         }
+
+    def summary_text(self) -> str:
+        """Human text, e.g. 'cocó · 1 min 47 s · 5,3 kg'."""
+        parts = [KIND_LABELS.get(self.kind, self.kind)]
+        if self.duration_s is not None:
+            m, s = divmod(int(self.duration_s), 60)
+            parts.append(f"{m} min {s} s" if m else f"{s} s")
+        if self.weight_kg is not None:
+            parts.append(f"{self.weight_kg:.1f} kg".replace(".", ","))
+        return " · ".join(parts)
 
 
 @dataclass
