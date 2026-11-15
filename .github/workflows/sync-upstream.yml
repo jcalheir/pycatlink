@@ -30,11 +30,6 @@ jobs:
           fi
           git merge --no-edit upstream/master
           echo "changed=true" >> "$GITHUB_OUTPUT"
-      - name: Check upstream email support
-        if: steps.merge.outputs.changed == 'true'
-        run: |
-          if grep -q "login/email" pycatlink/const.py && ! git log -1 --format=%H -- pycatlink/const.py | grep -q .; then :; fi
-          git log --oneline -5
       - name: Push
         if: steps.merge.outputs.changed == 'true'
         run: git push origin HEAD:master
