@@ -12,5 +12,8 @@
   "requirements": [
     "pycatlink==1.0.0"
   ],
-  "version": "1.0.0+email.2"
+  "version": "1.0.0+email.3",
+  "dependencies": [
+    "recorder"
+  ]
 }

@@ -23,6 +23,7 @@ from pycatlink.const import CatlinkC08WorkStatus
 from pycatlink.device import CatlinkDevice
 from pycatlink.models import CatlinkPet
 
+from .visit_entities import visit_sensors
 from .const import DOMAIN, MANUFACTURER
 from .coordinator import CatlinkDataUpdateCoordinator
 from .entity import CatlinkC08EntityDescription, CatlinkEntity, CatlinkEntityDescription
@@ -299,6 +300,8 @@ async def async_setup_entry(
         for pet_id in coordinator.data.pets
         for description in PET_SENSORS
     )
+
+    entities.extend(visit_sensors(coordinator))  # fork addition
 
     async_add_entities(entities)
 

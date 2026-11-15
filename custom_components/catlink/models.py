@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from pycatlink.account import CatlinkAccount
 from pycatlink.device import CatlinkDevice
@@ -30,6 +30,7 @@ class CatlinkCoordinatorData:
     account_config: CatlinkAccountConfig
     devices: dict[str, CatlinkDevice]
     pets: dict[str, CatlinkPet]
+    visits: Any = None  # fork: visits.VisitState
 
 
 type CatlinkConfigEntry = ConfigEntry[CatlinkData]

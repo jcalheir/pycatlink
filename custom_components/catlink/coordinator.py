@@ -2,6 +2,7 @@
 
 from datetime import timedelta
 import logging
+from zoneinfo import ZoneInfo
 
 from pycatlink.account import CatlinkAccount
 from pycatlink.c08 import CatlinkC08Device
@@ -12,9 +13,11 @@ from pycatlink.models import CatlinkPet
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN, UPDATE_INTERVAL
 from .models import CatlinkCoordinatorData
+from .visits import VisitTracker
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,6 +39,10 @@ class CatlinkDataUpdateCoordinator(DataUpdateCoordinator[CatlinkCoordinatorData]
         self.account = account
         self.devices: list[CatlinkDevice] = []
         self.pets: list[CatlinkPet] = []
+        self.visits = VisitTracker(
+            account._client,  # noqa: SLF001
+            ZoneInfo(hass.config.time_zone),
+        )
 
     async def async_config_entry_first_refresh(self) -> None:
         """Fetch initial data."""
@@ -68,10 +75,25 @@ class CatlinkDataUpdateCoordinator(DataUpdateCoordinator[CatlinkCoordinatorData]
                 if pet.id:
                     pets_data[pet.id] = pet
 
+            logs = [
+                log
+                for device in data.values()
+                if isinstance(device, CatlinkC08Device)
+                for log in (device.device_logs or [])
+            ]
+            try:
+                visit_state = await self.visits.update(
+                    logs, list(pets_data), dt_util.utcnow()
+                )
+            except Exception:  # noqa: BLE001
+                _LOGGER.exception("Failed to process CatLink visits")
+                visit_state = self.visits.state
+
             return CatlinkCoordinatorData(
                 account_config=self.account.config,
                 devices=data,
                 pets=pets_data,
+                visits=visit_state,
             )
         except CatlinkError as err:
             raise UpdateFailed(f"Error communicating with CatLink API: {err}") from err
