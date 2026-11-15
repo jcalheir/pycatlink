@@ -2,6 +2,7 @@
 
 import logging
 
+from . import email_login  # noqa: F401  (fork-only: email login shim)
 from pycatlink.account import CatlinkAccount
 from pycatlink.models import CatlinkAccountConfig
 

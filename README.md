@@ -8,3 +8,13 @@
 
 [![Code Quality](https://github.com/EuleMitKeule/pycatlink/actions/workflows/quality.yml/badge.svg)](https://github.com/EuleMitKeule/pycatlink/actions/workflows/quality.yml)
 [![Publish](https://github.com/EuleMitKeule/pycatlink/actions/workflows/publish.yml/badge.svg)](https://github.com/EuleMitKeule/pycatlink/actions/workflows/publish.yml)
+
+---
+
+## About this fork (jcalheir/pycatlink)
+
+Adds **email-based CatLink account** login (`login/email`) — enter the email in
+the "Phone number or email" field. The library change is proposed upstream; until
+a pycatlink release includes it, `custom_components/catlink/email_login.py` adds it
+on top of the PyPI library (no-op once upstream supports it). A weekly workflow
+merges upstream changes into this fork.

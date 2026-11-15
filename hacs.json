@@ -2,6 +2,5 @@
   "name": "CatLink",
   "render_readme": true,
   "homeassistant": "2026.4",
-  "zip_release": true,
-  "filename": "catlink.zip"
+  "zip_release": false
 }

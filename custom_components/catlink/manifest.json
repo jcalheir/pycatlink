@@ -8,9 +8,9 @@
   "documentation": "https://github.com/EuleMitKeule/pycatlink",
   "integration_type": "service",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/EuleMitKeule/pycatlink/issues",
+  "issue_tracker": "https://github.com/jcalheir/pycatlink/issues",
   "requirements": [
     "pycatlink==1.0.0"
   ],
-  "version": "0.0.0-dev"
+  "version": "1.0.0+email.1"
 }
